@@ -13,7 +13,9 @@ class creditCardController extends Controller
      */
     public function index()
     {
-        //
+        $creditCards = CreditCard::all();
+
+        return response()->json($creditCards);
     }
 
     /**
