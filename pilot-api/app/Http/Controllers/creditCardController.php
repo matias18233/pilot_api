@@ -22,7 +22,6 @@ class creditCardController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'card_id' => 'required|string|unique:credit_cards',
             'bank_name' => 'required|string|max:255',
             'card_number' => 'required',
             'credit_limit' => 'required|numeric|min:0',
@@ -31,6 +30,30 @@ class creditCardController extends Controller
             'cardholder_last_name' => 'required|string|max:255',
             'card_type' => 'required|in:visa,amex',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $creditCard = new CreditCard();
+        
+        $creditCard->card_id = $request->card_id;
+        $creditCard->bank_name = $request->bank_name;
+        $creditCard->card_number = $request->card_number;
+        $creditCard->credit_limit = $request->credit_limit;
+        $creditCard->cardholder_dni = $request->cardholder_dni;
+        $creditCard->cardholder_first_name = $request->cardholder_first_name;
+        $creditCard->cardholder_last_name = $request->cardholder_last_name;
+        $creditCard->card_type = $request->card_type;
+
+        $creditCard->save();
+
+        return response()->json([
+            'message' => 'Tarjeta de crédito almacenada correctamente!',
+            'data' => $creditCard
+        ], 201);
     }
 
     /**
