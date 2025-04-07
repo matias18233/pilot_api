@@ -21,7 +21,16 @@ class creditCardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'card_id' => 'required|string|unique:credit_cards',
+            'bank_name' => 'required|string|max:255',
+            'card_number' => 'required',
+            'credit_limit' => 'required|numeric|min:0',
+            'cardholder_dni' => 'required|digits:8',
+            'cardholder_first_name' => 'required|string|max:255',
+            'cardholder_last_name' => 'required|string|max:255',
+            'card_type' => 'required|in:visa,amex',
+        ]);
     }
 
     /**
